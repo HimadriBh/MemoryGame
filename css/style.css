@@ -1,0 +1,105 @@
+body,
+html{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+div{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+h1{
+    text-align: center;
+}
+
+.score__display{
+    width: 400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: baseline;
+}
+
+.rating{
+    display: flex;
+    list-style-type: none;
+}
+.container{
+    background-color: cornflowerblue;
+    padding: 2em;
+    width: 660px;
+    min-height: 680px;
+    box-shadow: 4px 8px 10px rgba(0, 0, 0, 0.52);
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    border-radius: 10px;
+    justify-content: space-evenly;
+}
+
+.card{
+    height: 125px;
+    width: 125px;
+    background-color: rgb(60, 97, 114);
+    margin: 10px;
+    border-radius: 10px;
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    position: relative;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 33px;
+    font-size: 0;
+}
+
+.card.open {
+    font-size: 30px;
+    background-color: teal;
+    cursor: default;
+
+}
+
+
+.card.match{
+    background-color: #187935;
+    cursor: default;
+    font-size: 30px;
+    animation: cardmatch 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.card.notmatch{
+    background-color: #d85825;
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+    10%, 90% {
+      transform: translate3d(-1px, 0, 0);
+    }
+    
+    20%, 80% {
+      transform: translate3d(2px, 0, 0);
+    }
+  
+    30%, 50%, 70% {
+      transform: translate3d(-4px, 0, 0);
+    }
+  
+    40%, 60% {
+      transform: translate3d(4px, 0, 0);
+    }
+  }
+
+  @keyframes cardmatch {
+    10%{
+        transform: scaleX(0.2);
+    }  
+    90%{
+        transform: scaleX(0.9);
+    }
+  }  
