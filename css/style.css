@@ -74,7 +74,7 @@ h1{
     background-color: #34a857;
     cursor: default;
     font-size: 30px;
-    animation: cardmatch 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation: cardmatch 0.6s ease-in;
 }
 
 .card.notmatch{
@@ -105,10 +105,13 @@ h1{
   }
 
   @keyframes cardmatch {
-    40%{
-        transform: scaleX(0.1);
-    }  
-    90%{
-        transform: scaleX(0.9);
+    20%{
+        transform: scaleX(0.5);
     }
+    50%{
+        transform: scaleX(1.2);
+    /* }
+    80%{
+        transform: scaleX(1.5);
+    } */
   }

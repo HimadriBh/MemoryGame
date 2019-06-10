@@ -68,6 +68,7 @@ function setCardEventListeners(){
                     hideCards();
                 }
             }
+            updateRating();
         });
     });
 }    
@@ -88,7 +89,7 @@ function resetGame(){
 }
 
 function checkIfWon(){ 
-    if(matchCount === 16){
+    // if(matchCount === 16){
         for(var card of cards){
            if(!card.classList.contains("open", 'match')){
                return;
@@ -105,7 +106,7 @@ function checkIfWon(){
             displayMessage();
         }, 600);
     }
-    }
+    // }
 }
 
 function updateMatchCount(){
@@ -121,8 +122,18 @@ function updateMovesCount(card){
 }
 
 function updateRating(){
-    console.log('firing');
-        stars[2].innerHTML = '<i class="fas fa-star-half"></i>';
+    if(movesCount == 4){
+        stars[2].innerHTML = '<i class="fas fa-star-half-alt"></i>';
+    }else if(movesCount == 8){
+        stars[2].innerHTML =  '<i class="far fa-star"></i>';
+    }else if(movesCount == 12){
+        stars[1].innerHTML =  '<i class="fas fa-star-half-alt"></i>';
+    }else if(movesCount == 15){
+        stars[1].innerHTML =  '<i class="far fa-star"></i>';
+    }
+    else if(movesCount == 20){
+        stars[10].innerHTML =  '<i class="fas fa-star-half-alt"></i>';
+    }
 }
 
 // Shuffle function from http://stackoverflow.com/a/2450976
@@ -152,7 +163,7 @@ function flipCard(card){
 }
 
 function displayMessage(){
-    displaymsg.innerHTML = `<i class='fas fa-check'></i> Contratulations!
+    displaymsg.innerHTML = `<i class='fas fa-check'></i> Contratulations!\n
     You WON the game in ${timer.textContent} seconds and ${moves.textContent} moves`;
     displaymsg.setAttribute(
         "style", "font-size :2em; text-align: center; margin-top: 100px");
@@ -163,7 +174,6 @@ function lockCards(){
     openCards.forEach((card)=>{
         card.classList.add('match', 'open');
         updateMatchCount();
-        
     })
     setTimeout(()=>{
         openCards = [];
@@ -173,11 +183,10 @@ function lockCards(){
 function hideCards(){
     openCards.forEach((card)=>{
         card.classList.add('shake', 'notmatch');
-        updateRating();
     })
     setTimeout(()=>{
         openCards.forEach((card)=>{
-            card.classList.remove('open', 'notmatch');                   
+            card.classList.remove('open', 'notmatch', 'shake');                   
         })
         openCards = [];
     }, 700);
