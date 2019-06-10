@@ -16,7 +16,7 @@ h1{
 }
 
 .score__display{
-    width: 400px;
+    width: 600px;
     margin: 0 auto;
     display: flex;
     justify-content: space-around;
@@ -27,8 +27,13 @@ h1{
     display: flex;
     list-style-type: none;
 }
+
+.reset{
+    cursor: pointer;
+}
 .container{
-    background-color: cornflowerblue;
+    /* background-color: cornflowerblue; */
+    background: linear-gradient(to right bottom, #4ad5df, #266488);
     padding: 2em;
     width: 660px;
     min-height: 680px;
@@ -43,7 +48,7 @@ h1{
 .card{
     height: 125px;
     width: 125px;
-    background-color: rgb(60, 97, 114);
+    background-color: rgb(47, 64, 71);
     margin: 10px;
     border-radius: 10px;
     box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.4);
@@ -59,22 +64,26 @@ h1{
 
 .card.open {
     font-size: 30px;
-    background-color: teal;
+    background-color: #02ccba;
     cursor: default;
 
 }
 
 
 .card.match{
-    background-color: #187935;
+    background-color: #34a857;
     cursor: default;
     font-size: 30px;
     animation: cardmatch 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .card.notmatch{
-    background-color: #d85825;
+    background-color: #d87b25;
     animation: shake 0.5s ease-in-out;
+}
+
+.hide{
+    display: none;
 }
 
 @keyframes shake {
@@ -96,10 +105,10 @@ h1{
   }
 
   @keyframes cardmatch {
-    10%{
-        transform: scaleX(0.2);
+    40%{
+        transform: scaleX(0.1);
     }  
     90%{
         transform: scaleX(0.9);
     }
-  }  
+  }

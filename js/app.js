@@ -2,140 +2,115 @@
  * Create a list that holds all of your cards
  */
 var iconHTML = [
-    '<i class="fas fa-dove"></i>',
-    '<i class="fas fa-dove"></i>',
-    '<i class="fas fa-dice-six"></i>',
-    '<i class="fas fa-dice-six"></i>',
-    '<i class="fas fa-chess-queen"></i>',
-    '<i class="fas fa-chess-queen"></i>',
-    '<i class="fas fa-heart"></i>',
-    '<i class="fas fa-heart"></i>',
-    '<i class="fas fa-republican"></i>',
-    '<i class="fas fa-republican"></i>',
-    '<i class="fas fa-dice-d6"></i>',
-    '<i class="fas fa-dice-d6"></i>',
-    '<i class="fas fa-child"></i>',
-    '<i class="fas fa-child"></i>',
-    '<i class="fas fa-flag"></i>',
-    '<i class="fas fa-flag"></i>',
-
+    '<i class="fas fa-dove"></i>', '<i class="fas fa-dove"></i>',
+    '<i class="fas fa-dice-six"></i>', '<i class="fas fa-dice-six"></i>',
+    '<i class="fas fa-chess-queen"></i>', '<i class="fas fa-chess-queen"></i>',
+    '<i class="fas fa-heart"></i>', '<i class="fas fa-heart"></i>',
+    '<i class="fas fa-republican"></i>', '<i class="fas fa-republican"></i>',
+    '<i class="fas fa-dice-d6"></i>', '<i class="fas fa-dice-d6"></i>',
+    '<i class="fas fa-child"></i>', '<i class="fas fa-child"></i>',
+    '<i class="fas fa-flag"></i>', '<i class="fas fa-flag"></i>',
 ];
 var allCards = [];
 var cardContainer = document.querySelector(".container");
-for(let index = 15; index >= 0; index--){
-    let card = document.createElement("div");
-    card.innerHTML = iconHTML[index];
-    card.classList.add("card");
-    allCards.push(card);
-}
-// shuffle cards
-cards = shuffle(allCards);
-cards.forEach((card)=>{
-    cardContainer.appendChild(card);
-})
-
 var cards = document.querySelectorAll('.card');
-//var cardContainer = document.querySelector(".container");
 var reset = document.querySelector(".reset");
 var moves = document.querySelector(".moves span");
 var stars = document.querySelectorAll(".rating li");
 var timer = document.querySelector(".timer span");
+var scoreDisplay = document.querySelector(".score__display");
+let displaymsg = document.createElement('div');
 var matchCount = 0;
 var openCards = [];
 var movesCount = 0;
-var timerId = setInterval(()=>{
+var gameTimer = setInterval(()=>{
     +(timer.textContent)++;
-}, 1000);
-// console.log(cards[1].remove());
+    },
+    1000);
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
  *   - loop through each card and create its HTML
  *   - add each card's HTML to the page
  */
-// cards.forEach((card)=>{
-//     card.addEventListener
-// });
+initGame();
 
-//reset game
-//resetGame();
-cards.forEach((card)=>{
-    card.addEventListener("click", (e)=>{
-    // var card = e.target;
-    flipCard(card);
-       console.log(openCards);
-        updateMovesCount(card);
+function initGame(){
+    setUpCards();
+    setCardEventListeners();
+}
+
+
+function setUpCards(){
+    for(let index = 15; index >= 0; index--){
+        let card = document.createElement("div");
+        card.innerHTML = iconHTML[index];
+        card.classList.add("card");
+        allCards.push(card);
+    }
+    // shuffle cards
+    cards = shuffle(allCards);
+    cards.forEach((card)=>{
+        cardContainer.appendChild(card);
+    })
+}
+
+function setCardEventListeners(){
+    cards.forEach((card)=>{
+        card.addEventListener("click", (e)=>{
+            flipCard(card);
+            updateMovesCount(card);
             if(openCards.length === 2){
                 if(openCards[0].innerHTML == openCards[1].innerHTML){
                     // check if won?
-                    openCards.forEach((card)=>{
-                        card.classList.add('match');
-                        
-                    })
-                    setTimeout(()=>{
-                        openCards = [];
-                    }, 700);
-                    updateMatchCount();
+                    lockCards();
                 }else{
-                    openCards.forEach((card)=>{
-                        card.classList.add('shake', 'notmatch');
-                        updateRating();
-                    })
-                    setTimeout(()=>{
-                        openCards.forEach((card)=>{
-                            card.className = 'card';                        
-                        })
-                        openCards = [];
-                    }, 700);
+                    hideCards();
                 }
             }
+        });
     });
-});
+}    
 
 reset.addEventListener("click", function(){
-    console.log("event listener working")
     resetGame();
 })
 
-
-
-
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
-
-
-//  reset game function
-
 function resetGame(){
+    if(document.body.contains(displaymsg)){
+        displaymsg.remove();
+    }
     cards.forEach((card)=>{
-        card.classList.remove("open", "show", 'match');
+        cardContainer.removeChild(card);
     })
-    var shuffledCards = shuffle(cards);
-    console.log(shuffledCards);
+    resetAllControls();
+    initGame();
 }
 
-function checkWin(){ 
+function checkIfWon(){ 
     if(matchCount === 16){
-        console.log("not removing container");
-        cardContainer.childNode.remove();
+        for(var card of cards){
+           if(!card.classList.contains("open", 'match')){
+               return;
+           }
+        }
+        // call off gamerTimer after win
+        try{
+        clearInterval(gameTimer);
+        }
+        finally{
+        setTimeout(()=>{
+            cardContainer.classList.add("hide");
+            scoreDisplay.classList.add("hide");
+            displayMessage();
+        }, 600);
+    }
     }
 }
 
 function updateMatchCount(){
-    matchCount += 2;
-    console.log(matchCount);
-    if(matchCount === 16){
-        console.log("not removing container");
-        cardContainer.childNode.remove();
-    }
+    matchCount += 1;
+    checkIfWon();
 }
 
 function updateMovesCount(card){
@@ -166,15 +141,71 @@ function shuffle(array) {
 }
 
 function flipCard(card){
-    if(openCards.length <= 2){
-        if(card.classList.contains('card')){
-            if(!card.classList.contains('open') && !card.classList.contains('match')){
+    if(card.classList.contains('card')){
+        if(!card.classList.contains('open') && !card.classList.contains('match')){
+            if(openCards.length < 2){
                 card.classList.add("open");
                 openCards.push(card);
-                console.log(openCards.length);
             }
         }
-    }else{
-        openCards = [];
     }
 }
+
+function displayMessage(){
+    displaymsg.innerHTML = `<i class='fas fa-check'></i> Contratulations!
+    You WON the game in ${timer.textContent} seconds and ${moves.textContent} moves`;
+    displaymsg.setAttribute(
+        "style", "font-size :2em; text-align: center; margin-top: 100px");
+    document.body.appendChild(displaymsg);
+}
+
+function lockCards(){
+    openCards.forEach((card)=>{
+        card.classList.add('match', 'open');
+        updateMatchCount();
+        
+    })
+    setTimeout(()=>{
+        openCards = [];
+    }, 700);
+}
+
+function hideCards(){
+    openCards.forEach((card)=>{
+        card.classList.add('shake', 'notmatch');
+        updateRating();
+    })
+    setTimeout(()=>{
+        openCards.forEach((card)=>{
+            card.classList.remove('open', 'notmatch');                   
+        })
+        openCards = [];
+    }, 700);
+}
+
+function resetAllControls(){
+    cardContainer.classList.remove('hide');
+    clearInterval(gameTimer);
+    matchCount = 0;
+    openCards = [];
+    movesCount = 0;
+    allCards = [];
+    moves.textContent = 0;
+    timer.textContent = 0;
+    gameTimer = setInterval(()=>{
+        +(timer.textContent)++;
+    }, 1000);
+}
+/*
+ * set up the event listener for a card. If a card is clicked:
+ *  - display the card's symbol (put this functionality in another function that you call from this one)
+ *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
+ *  - if the list already has another card, check to see if the two cards match
+ *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
+ *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
+ *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
+ *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
+ */
+
+
+//  reset game function
