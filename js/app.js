@@ -122,17 +122,14 @@ function updateMovesCount(card){
 }
 
 function updateRating(){
-    if(movesCount == 4){
+    if(movesCount == 6){
         stars[2].innerHTML = '<i class="fas fa-star-half-alt"></i>';
-    }else if(movesCount == 8){
+    }else if(movesCount == 10){
         stars[2].innerHTML =  '<i class="far fa-star"></i>';
-    }else if(movesCount == 12){
+    }else if(movesCount == 14){
         stars[1].innerHTML =  '<i class="fas fa-star-half-alt"></i>';
-    }else if(movesCount == 15){
+    }else if(movesCount == 18){
         stars[1].innerHTML =  '<i class="far fa-star"></i>';
-    }
-    else if(movesCount == 20){
-        stars[10].innerHTML =  '<i class="fas fa-star-half-alt"></i>';
     }
 }
 
@@ -163,10 +160,13 @@ function flipCard(card){
 }
 
 function displayMessage(){
-    displaymsg.innerHTML = `<i class='fas fa-check'></i> Contratulations!\n
-    You WON the game in ${timer.textContent} seconds and ${moves.textContent} moves`;
-    displaymsg.setAttribute(
-        "style", "font-size :2em; text-align: center; margin-top: 100px");
+    var starRating = 0;
+    var message = document.querySelector(".msgbox");
+    if(movesCount > 18){
+        starRating = 1;
+    }
+    displaymsg.innerHTML = `With ${moves.textContent} moves and ${starRating} star`;
+    message.classList.remove('hide');
     document.body.appendChild(displaymsg);
 }
 
