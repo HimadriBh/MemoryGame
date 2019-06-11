@@ -17,10 +17,16 @@ p{
     box-sizing: border-box;
 }
 
+h1{
+    padding: 0;
+    margin: 0;
+}
+
 .game__title {
     text-align: center;
     font-weight: 300;
-    padding: 0 auto;
+    margin-top: 20px;
+    font-family: 'Coda', cursive;
 }
 
 /* SCORE PANEL STYLES */
