@@ -3,17 +3,24 @@ html{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Open Sans', sans-serif;
 }
 
-div{
+body{
+    background: #ffffff url(../img/geometry2.png);
+}
+
+div,
+p{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-h1{
+.game__title {
     text-align: center;
+    font-weight: 300;
+    padding: 0 auto;
 }
 
 /* SCORE PANEL STYLES */
@@ -48,6 +55,7 @@ h1{
     flex-wrap: wrap;
     border-radius: 10px;
     justify-content: space-evenly;
+    perspective: 500px;
 }
 
 .card{
@@ -58,33 +66,37 @@ h1{
     border-radius: 10px;
     box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.4);
     cursor: pointer;
-    position: relative;
+    transform-origin: 50% 100% 0;
     display:flex;
     align-items: center;
     justify-content: center;
     color: #ffffff;
-    font-size: 33px;
     font-size: 0;
+    transform: rotateY(180deg);
+    transition: transform 0.5s;
+    transform-style: preserve-3d;
 }
 
 .card.open {
-    font-size: 30px;
-    background-color: #02ccba;
+    transform: rotateY(0deg);
+    background-color: #02b3e4;
     cursor: default;
-    transform: rotateY(0);
 }
 
+.card.show {
+    font-size: 33px;
+}
 
 .card.match{
-    background-color: #34a857;
+    background-color: rgb(19, 206, 190);
     cursor: default;
     font-size: 30px;
-    animation: cardmatch 0.5s;
+    animation: cardmatch 0.3s cubic-bezier(1, 0, 0, 1);
 }
 
 .card.notmatch{
     background-color: #d87b25;
-    animation: shake 0.5s ease-in-out;
+    animation: shake 0.3s ease-in-out;
 }
 
 .hide{
@@ -92,20 +104,11 @@ h1{
 }
 
 @keyframes shake {
-    10%, 90% {
-      transform: translate3d(-1px, 0, 0);
+    0%, 100%{
+    transform: rotate(-8deg);
     }
-    
-    20%, 80% {
-      transform: translate3d(2px, 0, 0);
-    }
-  
-    30%, 50%, 70% {
-      transform: translate3d(-4px, 0, 0);
-    }
-  
-    40%, 60% {
-      transform: translate3d(4px, 0, 0);
+    50%{ 
+    transform: rotate(6deg);
     }
 }
 
@@ -123,35 +126,39 @@ h1{
     margin: 100px auto;
     display: flex;
     flex-flow: column;
+    align-items: center;
     font-size: 1.2em;
+    justify-content: center;
+    color: #333;
+}
+
+.msgbox h1{
+    margin-top: 10px;
 }
 
 svg {
-width: 100px;
-display: block;
-margin: 40px auto 0;
+    width: 100px;
+    display: block;
+    margin: 40px auto 0;
 }
   
 .path {
-stroke-dasharray: 1000;
-stroke-dashoffset: 0;
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 0;
 }
 
 .circle {
--webkit-animation: dash .9s ease-in-out;
-animation: dash .9s ease-in-out;
+    animation: dash .9s ease-in-out;
 }
 
 .line {
-stroke-dashoffset: 1000;
--webkit-animation: dash .9s .35s ease-in-out forwards;
-animation: dash .9s .35s ease-in-out forwards;
+    stroke-dashoffset: 1000;
+    animation: dash .9s .35s ease-in-out forwards;
 }
 
 .check {
-stroke-dashoffset: -100;
--webkit-animation: dash-check .9s .35s ease-in-out forwards;
-animation: dash-check .9s .35s ease-in-out forwards;
+    stroke-dashoffset: -100;
+    animation: dash-check .9s .35s ease-in-out forwards;
 }
   
 @keyframes dash {
@@ -170,4 +177,21 @@ animation: dash-check .9s .35s ease-in-out forwards;
     100% {
         stroke-dashoffset: 900;
     }
+}
+
+.final__scores{
+    font-weight: 200;
+    margin: 20px auto;
+    color: #555;
+    text-align: center;
+}
+
+.playagain__btn{
+    background-color: #02ccba;
+    color: white;
+    padding: 15px 24px;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }

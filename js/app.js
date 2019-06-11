@@ -19,14 +19,13 @@ var moves = document.querySelector(".moves span");
 var stars = document.querySelectorAll(".rating li");
 var timer = document.querySelector(".timer span");
 var scoreDisplay = document.querySelector(".score__display");
-let displaymsg = document.createElement('div');
+var msgSection = document.querySelector("section");
+var finalScore = document.querySelector(".final__scores");
+let playAgainbtn = document.querySelector(".playagain__btn");
 var matchCount = 0;
 var openCards = [];
 var movesCount = 0;
-var gameTimer = setInterval(()=>{
-    +(timer.textContent)++;
-    },
-    1000);
+var gameTimer;
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
@@ -38,6 +37,7 @@ initGame();
 function initGame(){
     setUpCards();
     setCardEventListeners();
+    initTimer();
 }
 
 
@@ -77,10 +77,20 @@ reset.addEventListener("click", function(){
     resetGame();
 })
 
+playAgainbtn.addEventListener("click", function(){
+    scoreDisplay.classList.remove("hide");
+    msgSection.classList.add("hide");
+    resetGame();
+})
+
+function initTimer(){
+    gameTimer = setInterval(()=>{
+        +(timer.textContent)++;
+        },
+        1000);
+}
+
 function resetGame(){
-    if(document.body.contains(displaymsg)){
-        displaymsg.remove();
-    }
     cards.forEach((card)=>{
         cardContainer.removeChild(card);
     })
@@ -89,9 +99,8 @@ function resetGame(){
 }
 
 function checkIfWon(){ 
-    // if(matchCount === 16){
         for(var card of cards){
-           if(!card.classList.contains("open", 'match')){
+           if(!card.classList.contains("open", 'match', 'show')){
                return;
            }
         }
@@ -104,9 +113,8 @@ function checkIfWon(){
             cardContainer.classList.add("hide");
             scoreDisplay.classList.add("hide");
             displayMessage();
-        }, 600);
+        }, 800);
     }
-    // }
 }
 
 function updateMatchCount(){
@@ -150,9 +158,9 @@ function shuffle(array) {
 
 function flipCard(card){
     if(card.classList.contains('card')){
-        if(!card.classList.contains('open') && !card.classList.contains('match')){
+        if(!card.classList.contains('open') &&!card.classList.contains('show') && !card.classList.contains('match')){
             if(openCards.length < 2){
-                card.classList.add("open");
+                card.classList.add("open", 'show');
                 openCards.push(card);
             }
         }
@@ -160,19 +168,17 @@ function flipCard(card){
 }
 
 function displayMessage(){
-    var starRating = 0;
-    var message = document.querySelector(".msgbox");
+    var starRating = 2;
     if(movesCount > 18){
         starRating = 1;
     }
-    displaymsg.innerHTML = `With ${moves.textContent} moves and ${starRating} star`;
-    message.classList.remove('hide');
-    document.body.appendChild(displaymsg);
+    finalScore.innerHTML = `<p>With ${moves.textContent} moves and ${starRating} star</p><p>Wooohoooo!!!</p>`;
+    msgSection.classList.remove('hide');
 }
 
 function lockCards(){
     openCards.forEach((card)=>{
-        card.classList.add('match', 'open');
+        card.classList.add('match', 'open', 'show');
         updateMatchCount();
     })
     setTimeout(()=>{
@@ -186,15 +192,19 @@ function hideCards(){
     })
     setTimeout(()=>{
         openCards.forEach((card)=>{
-            card.classList.remove('open', 'notmatch', 'shake');                   
+            card.classList.remove('open', 'notmatch', 'shake', 'show');                   
         })
         openCards = [];
     }, 700);
 }
 
 function resetAllControls(){
+    stars.forEach((star)=>{
+        star.innerHTML = '<i class="fas fa-star"></i>';
+    })
     cardContainer.classList.remove('hide');
     clearInterval(gameTimer);
+    finalScore.innerHTML = '';
     matchCount = 0;
     openCards = [];
     movesCount = 0;
@@ -215,6 +225,3 @@ function resetAllControls(){
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
-
-
-//  reset game function
